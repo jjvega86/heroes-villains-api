@@ -13,8 +13,11 @@ def api_overview(request):
         },
         "supers": {
             "GET all supers": "/api/supers",
+            "POST a new super": "/api/supers",
             "GET super by id": "/api/supers/<int:pk>",
-            "POST a new super": "/api/supers"
+            "PUT an existing super": "/api/supers/<int:pk>",
+            "DELETE an existing super": "/api/supers/<int:pk>",
+            "GET supers by type": "/api/supers?type=<super_type.type>"
         }
     }
     return Response(data=routes, template_name=None)
