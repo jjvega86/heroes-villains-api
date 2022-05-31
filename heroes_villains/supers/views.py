@@ -1,10 +1,11 @@
+from xmlrpc.client import ResponseError
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from .serializers import SuperSerializer
-from .models import Super
+from .models import Super, Power
 
 # Create your views here.
 
@@ -56,3 +57,17 @@ def supers_detail(request, pk):
     elif request.method == 'DELETE':
         super.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['PATCH'])
+def supers_super_powers(request, super_pk, power_pk):
+    try:
+        super = Super.objects.get(id=super_pk)
+        power = Power.objects.get(id=power_pk)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    super.powers.add(power)
+    super.save()
+    serializer = SuperSerializer(super)
+    return Response(serializer.data, status=status.HTTP_200_OK)
